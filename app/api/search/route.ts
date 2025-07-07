@@ -22,9 +22,16 @@ export async function GET(req: NextRequest) {
 
     const data = await response.json();
     return NextResponse.json(data);
-  } catch (err: any) {
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      return NextResponse.json(
+        { error: "Internal Server Error", message: err.message },
+        { status: 500 }
+      );
+    }
+
     return NextResponse.json(
-      { error: "Internal Server Error", message: err.message },
+      { error: "Internal Server Error", message: "Unknown error occurred" },
       { status: 500 }
     );
   }

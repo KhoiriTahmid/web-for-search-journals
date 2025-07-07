@@ -4,6 +4,8 @@ import { ArxivEntry } from "./type";
 import { categoryMap } from "./category";
 import Link from "next/link";
 
+type SearchResult = [ArxivEntry, unknown];
+
 export default function Home() {
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(false);
@@ -15,7 +17,7 @@ export default function Home() {
     fetch("api/search?query=" + query.replace(" ", "%20"))
       .then((res) => res.json())
       .then((res) => {
-        const result = res!.results.map((e: any[]) => e[0]);
+        const result = res!.results.map((e: SearchResult) => e[0]);
         setData(result);
         localStorage.setItem("search_results", JSON.stringify(result));
       })
